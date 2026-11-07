@@ -1,8 +1,10 @@
 # Botika ni Lolo (Grandfather's Apothecary)
 
-A 3D educational game about Filipino traditional medicine, played inside a rural *kubo* and the yard around it. Unity 6, C#. I built the whole Unity side of it myself; two friends did the 3D models and environments in Blender.
+Top 5, DTI Young Creatives Challenge Season 3 (Game Development Category) · Third Place, TIP Innovation Fair 2026 · Fourth Place, Best Capstone 2026
 
-You play as a grandchild looking after your lolo's *botika* — his herbal apothecary. You learn which plants heal what, prepare remedies the traditional way, and write everything down in a journal as you go. Five chapters, each with its own intro cutscene, objectives, and a star rating at the end.
+A 3D educational game about Department of Health-approved Filipino herbal medicinal plants, set inside a rural *bahay kubo*. Unity 6, C#. I built the entire Unity side; two collaborators modeled the 3D assets and environments in Blender.
+
+You play as a grandchild looking after your lolo's *botika* (herbal apothecary). You learn which plants heal what, prepare remedies the traditional way, and record everything in a journal as you go. Five chapters, each with its own intro cutscene, objectives, and closing star rating.
 
 | | |
 |---|---|
@@ -12,54 +14,63 @@ You play as a grandchild looking after your lolo's *botika* — his herbal apoth
 | **Platform** | Windows |
 | **My role** | Solo Unity developer — all code, UI, scene assembly, asset integration |
 | **Art** | Two collaborators, modeled in Blender |
-| **Status** | Content-complete prototype |
+| **Status** | Content-complete prototype — Windows build available |
 
-## What I built
+## Awards
 
-Every line of Unity code in this project is mine, along with the scene structure, the UI, and the work of getting my collaborators' models into the game and making them behave.
+| Award | Awarding body | Placement | Year |
+|---|---|---|---|
+| Young Creatives Challenge, Season 3 — Game Development Category | Philippine Department of Trade and Industry (DTI) | Top 5 | 2026 |
+| TIP Innovation Fair | Technological Institute of the Philippines — Manila | Third Place | 2026 |
+| Best Capstone | Technological Institute of the Philippines — College of Computer Studies (CCS), Manila and Quezon City campuses | Fourth Place | 2026 |
 
-**Chapter progression** — One place in the code decides what chapter the player is in, which gates what they can interact with, moves them between scenes, and feeds the results screen. I kept it in one system on purpose. Spreading that state across per-scene flags is faster to write and much worse to debug by chapter five.
+## My Contributions:
 
-**The journal** — The heart of the game, since it's where the learning actually lands. `JournalManager.cs` owns the data: what the player has found, what they've finished, and nothing about how any of it looks. The achievements page and the plant gallery each handle their own screen. That split means I can add another journal page later without touching the manager, and the manager never grows a branch for every page that exists.
+Every line of Unity code, the scene structure, the UI, with the integration of my collaborators' models.
 
-**Plant identification and harvesting** — Picking things up, checking what they are, and recording the find in the journal.
+**Chapter progression** — One system decides the current chapter, gates interactions by it, moves the player between scenes, and feeds the results screen. Per-scene flags would be faster to write and much worse to debug by chapter five.
 
-**The chop minigame** — Its own input handling, separate from normal walking around. Player rotation locks while it's running; otherwise mouse-look keeps the camera turning during play and the whole thing spins. Input is scoped per gameplay mode, so the rule lives in one place instead of scattered per-frame checks.
+**The journal** — Where player learns about the plants. `JournalManager.cs` has the data (what's been found and what's finished) and nothing about visuals. `JournalAchievementsPage` and `JournalPlantGalleryPage` each own one screen, and adding a page means a new page script and a registration and not a new branch in the manager.
 
-**Star ratings and chapter results** — How the player did in a chapter, shown before they move on.
+**Plant identification and harvesting** — Picking up plants, examining them, recording the find in the journal.
 
-**NPC interaction** — Handles spotting an NPC nearby, showing the prompt, and handing off to the dialogue UI.
+**The chop minigame** — Runs its own input handling apart from locomotion. Player rotation locks while it's active, otherwise mouse-look keeps turning the camera and the whole view spins. Input is scoped per gameplay mode so each rule lives in one place instead of scattered per-frame checks.
 
-**Cutscenes** — Chapter intros and quest videos, tied into the progression state so they play at the right moment.
+**Star ratings and chapter results** — `ChapterResult.cs` scores the chapter from player performance and shows the result before the next one starts.
 
-**UI** — Main menu, chapter select, pause panel, and the gameplay icon bar with key prompts. All built as prefabs and instantiated, never duplicated per scene. Change the prompt style once and it changes everywhere. Duplicated per-scene UI is the fastest way to end up with a menu that looks different in chapter three, and prefabs make that impossible.
+**NPC interaction** — Proximity detection, interaction prompt, hand-off to dialogue, and cleanup when dialogue closes, all in `NPCInteraction.cs`.
 
-**First-person controller** — Movement with a walking head-bob and footsteps, driven by movement state rather than a fixed timer so the audio matches what the player is actually doing.
+**Cutscenes** — Chapter intros and quest videos, driven by progression state so they fire at the right moment.
+
+**UI** — Main menu, chapter select, pause panel, and the gameplay icon bar with key prompts. All prefabs, instantiated rather than copied per scene, so a styling change lands everywhere at once and scene files stay small.
+
+**First-person controller** — Movement with a walking head-bob. Footsteps follow movement state rather than a fixed timer, so the audio matches what the player is doing.
 
 ## Layout
 
-Scripts sit under `Assets/Scripts/Scripts/`. There are no nested system folders, since with one person on the code, a deep hierarchy costs me more in navigation than it gains in tidiness. The journal's split shows up in the names instead: `JournalManager`, `JournalAchievementsPage`, `JournalPlantGalleryPage`.
+Scripts sit under `Assets/Scripts/Scripts/` with no nested system folders — with one person on the code, a deep hierarchy costs more in navigation than it gains in tidiness. The journal's split lives in the file names instead: `JournalManager`, `JournalAchievementsPage`, `JournalPlantGalleryPage`.
 
-Tutorial logic lives in its own `Tutorial/` folder because it's the content most likely to get cut or reworked and I wanted that to happen in one place.
+`Tutorial/` is separate because it's the content most likely to be cut or reworked, and that should happen without touching progression code.
 
-Shared UI lives as prefabs under `Assets/Assets/GENERAL prefabs/` — pause, dialogue, key prompts, gameplay icon bar. Scenes stay small as a result and holds references instead of copies.
+Shared UI lives as prefabs under `Assets/Assets/GENERAL prefabs/` — pause, dialogue, key prompts, gameplay icon bar.
 
-Scenes line up with chapters:
+Scenes map one-to-one to chapters:
 
 | Scene | What it's for |
 |---|---|
 | `MainMenu` | Entry point, chapter select |
 | `CH1_Intro` | Chapter 1 opening |
+| `PekengScene` | Chapter 1 |
 | `Chapter2` | Chapter 2 |
 | `Chapter3A` | Chapter 3 |
 | `Chapter4A` | Chapter 4 |
 | `Chapter5` | Chapter 5 |
-| `PekengScene` | Secondary gameplay scene |
+
 
 ## Running it
 
-1. Install **Unity 6, version 6000.1.1f1**. A different version will likely ask you to upgrade the project.
-2. Install Git LFS first — the cutscene videos are stored through it, and a plain clone gets you empty files instead of video:
+1. Install **Unity 6, version 6000.1.1f1**. Other versions will prompt you to upgrade the project.
+2. Install Git LFS first — cutscene videos are stored through it, and a plain clone gives you empty files instead of video:
 
    ```
    git lfs install
@@ -70,7 +81,7 @@ Scenes line up with chapters:
 4. Open `Assets/Scenes/MainMenu.unity`.
 5. Press Play.
 
-One thing to expect: a font asset is missing on purpose (see below). Unity will flag it when the project opens. It doesn't touch the scripts, the scenes, or how the game plays.
+Unity will flag one missing font asset when the project opens (see below) as the fonts we used are not for public release, but it does not affect the scripts, scenes, or gameplay.
 
 ## Controls
 
@@ -83,7 +94,7 @@ One thing to expect: a font asset is missing on purpose (see below). Unity will 
 
 ## Build
 
-There's a playable Windows build under Releases. The prototype archive I kept locally (`Botika Ni Lolo_Prototype.zip`) is in `.gitignore` and stays out of the source tree.
+A playable Windows build is under Releases. The local prototype archive (`Botika Ni Lolo_Prototype.zip`) is in `.gitignore` and stays out of the source tree.
 
 ## Credits and licenses
 
@@ -94,12 +105,12 @@ There's a playable Windows build under Releases. The prototype archive I kept lo
 | Animal models | `Assets/ithappy/Animals_FREE/` | Free pack, used under its terms |
 | Tree shaders | `Assets/FreeTreeShaders/` | Free asset, used under its terms |
 | Jungle UI | `Assets/Jungle_UI/` | Free asset, used under its terms |
-| Font — DivebarVintage | Personal-use license | **Not in this repo** — the license doesn't allow me to redistribute it |
+| Font — DivebarVintage | Personal-use license | **Not in this repo** — the license doesn't allow redistribution |
 | Font — KCObraLetraRegular | Free font | Check the bundled license file for attribution requirements |
 | Footstep SFX | Freesound (author: owlstorm) | Free sound, credit the author |
-| Music and remaining audio | See the files in `Assets/Botika/Audio/` | Check individual sources for credit requirements |
+| Music and remaining audio | Files under `Assets/Botika/Audio/` | Check individual sources for credit requirements |
 
-**About the missing font.** One font I used is licensed for personal use only, so I left it out of this repository rather than redistribute something I don't have the rights to. Unity reports it as missing when the project opens. The build under Releases has it, so the game looks the way it should when you play it.
+**Note on the missing font** - One font is licensed for personal use only and stays out of this repository since I can't redistribute something I have no right to. Unity will report it as missing on open, but the build under Releases includes it so the game renders as intended when played.
 
 ## Repo layout
 
@@ -112,4 +123,4 @@ Docs/              Technical notes
 .gitignore         Generated folders, builds, restricted assets
 ```
 
-Unity's generated folders (`Library/`, `Temp/`, `Logs/`, `Build/`, `UserSettings/`) aren't tracked, they rebuild themselves when the project opens. Neither are compiled builds or my local prototype archive.
+Unity's generated folders (`Library/`, `Temp/`, `Logs/`, `Build/`, `UserSettings/`) aren't tracked — they rebuild on open. Neither are compiled builds or the local prototype archive.
