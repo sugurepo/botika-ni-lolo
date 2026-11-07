@@ -1,0 +1,52 @@
+# Unity-generated folders
+/[Ll]ibrary/
+/[Tt]emp/
+/[Oo]bj/
+/[Ll]ogs/
+/[Uu]serSettings/
+/[Mm]emoryCaptures/
+/[Rr]ecordings/
+
+# Compiled game builds
+/[Bb]uild/
+/[Bb]uilds/
+
+# Visual Studio, VS Code, and Rider-generated files
+/.vs/
+.idea/
+.vscode/
+*.csproj
+*.sln
+*.user
+*.userprefs
+*.suo
+*.tmp
+
+# Exported packages and application builds
+*.unitypackage
+*.apk
+*.aab
+
+# Operating-system files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Crash logs and temporary files
+sysinfo.txt
+*.log
+*.stacktrace
+*.bak
+*.orig
+
+# Gradle cache
+.gradle/
+
+# Local archives and exported game builds
+*.zip
+
+# Restricted personal-use font - kept locally, not published
+/Assets/TextMesh Pro/Fonts/DivebarVintage_PERSONAL_USE_ONLY.otf
+/Assets/TextMesh Pro/Fonts/DivebarVintage_PERSONAL_USE_ONLY.otf.meta
+/Assets/TextMesh Pro/Fonts/DivebarVintage_PERSONAL_USE_ONLY SDF.asset
+/Assets/TextMesh Pro/Fonts/DivebarVintage_PERSONAL_USE_ONLY SDF.asset.meta
